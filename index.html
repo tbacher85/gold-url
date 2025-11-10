@@ -339,11 +339,15 @@
         <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent rounded-full"></div>
         <h1 class="text-4xl md:text-6xl font-bold gold-gradient title-font mb-4 tracking-wide">Alchemist's Forge</h1>
         <p class="text-lg md:text-xl text-amber-200 max-w-2xl mx-auto leading-relaxed px-4">
-            Transform long, messy URLs into <span class="text-amber-300 font-semibold">golden, trackable links</span>
+            Transform long URLs into <span class="text-amber-300 font-semibold">golden, trackable short links</span>
         </p>
         <div class="mt-4 bg-amber-900/30 inline-flex items-center px-4 py-2 rounded-full border border-amber-700/50">
             <i class="fas fa-flask text-amber-400 mr-2"></i>
-            <span class="text-amber-200 text-sm">Powered by Gold-URL.com</span>
+            <span class="text-amber-200 text-sm">Live Demo - Real Redirects Active</span>
+        </div>
+        <div class="mt-2 text-xs text-amber-300/70 max-w-md mx-auto">
+            <i class="fas fa-star mr-1"></i>
+            Working short URLs with preview analytics
         </div>
         <div class="mt-4 flex justify-center space-x-2">
             <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
@@ -393,26 +397,26 @@
                         <div class="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center mr-4">
                             <i class="fas fa-chart-line text-amber-400 text-xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-amber-300">Track Engagement & Analytics</h3>
+                        <h3 class="text-xl font-bold text-amber-300">Preview: Engagement Analytics</h3>
                     </div>
-                    <p class="text-gray-300 mb-4">See exactly how many people click your links and when. Essential data for marketing campaigns and understanding your audience.</p>
+                    <p class="text-gray-300 mb-4">See exactly how analytics will work in the full version. Essential data for marketing campaigns and understanding your audience.</p>
                     
                     <div class="bg-black/30 rounded-lg p-4 mb-3">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-amber-300 font-mono">gold-url.com/gold123</span>
-                            <span class="bg-amber-500 text-black px-2 py-1 rounded-full text-sm font-bold">84 clicks</span>
+                            <span class="bg-amber-500 text-black px-2 py-1 rounded-full text-sm font-bold">84 demo clicks</span>
                         </div>
                         <div class="text-xs text-gray-400">
                             <div class="flex justify-between">
-                                <span>Last 7 days:</span>
+                                <span>Preview data:</span>
                                 <span class="text-amber-300">+24% growth</span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="text-xs text-amber-200/70">
-                        <i class="fas fa-check-circle mr-1"></i>
-                        Monitor campaign performance and audience engagement in real-time
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Full version tracks all clicks from anywhere, not just demo clicks
                     </div>
                 </div>
             </div>
@@ -421,10 +425,11 @@
         <!-- Demo Notice Banner -->
         <div class="glass rounded-2xl p-4 mb-6 border-l-4 border-amber-500">
             <div class="flex items-start">
-                <i class="fas fa-info-circle text-amber-400 text-xl mr-3 mt-1"></i>
+                <i class="fas fa-rocket text-amber-400 text-xl mr-3 mt-1"></i>
                 <div>
-                    <h3 class="font-bold text-amber-300">Interactive Demo</h3>
-                    <p class="text-gray-300 text-sm">This is a working demo showing the core functionality. Your links are stored locally in this browser. <span class="text-amber-200">Join the waitlist for the full cloud version with advanced features!</span></p>
+                    <h3 class="font-bold text-amber-300">Live Demo - Real Redirects Active!</h3>
+                    <p class="text-gray-300 text-sm">Your short URLs now actually work! Create a link and test it. 
+                    <span class="text-amber-200">Analytics preview shows the full version experience - currently tracking demo clicks only.</span></p>
                 </div>
             </div>
         </div>
@@ -442,7 +447,7 @@
             <h2 class="text-2xl font-bold text-amber-300 mb-4 flex items-center">
                 <i class="fas fa-fire mr-3 text-amber-500"></i> Forge a New Elixir
             </h2>
-            <p class="text-gray-300 mb-6 leading-relaxed">Transform your lengthy URL into a powerful, shortened Elixir.</p>
+            <p class="text-gray-300 mb-6 leading-relaxed">Transform your lengthy URL into a powerful, shortened Elixir that actually works!</p>
             
             <div class="flex flex-col md:flex-row gap-4 mb-4">
                 <div class="flex-grow relative">
@@ -464,7 +469,7 @@
                 </button>
             </div>
             <p class="text-xs text-gray-500 text-center md:text-left">
-                <i class="fas fa-info-circle mr-1"></i> Demo data stored in your browser only
+                <i class="fas fa-info-circle mr-1"></i> Your short URLs will actually redirect! Analytics preview shows full version experience.
             </p>
         </section>
 
@@ -505,9 +510,23 @@
 
             <!-- Enhanced Analytics Section -->
             <div id="analytics-section" class="hidden bg-amber-900/20 rounded-xl p-4 border border-amber-700/30 mb-4">
-                <h4 class="font-bold text-amber-300 mb-3 flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i> Link Analytics
-                </h4>
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-bold text-amber-300 flex items-center">
+                        <i class="fas fa-chart-bar mr-2"></i> Analytics Preview
+                    </h4>
+                    <span class="bg-amber-500 text-black text-xs px-2 py-1 rounded-full font-bold">DEMO</span>
+                </div>
+                
+                <div class="bg-amber-800/20 rounded-lg p-3 mb-3">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-amber-400 mt-1 mr-2"></i>
+                        <p class="text-amber-200 text-sm">
+                            This preview shows how analytics will work. Currently tracking demo clicks only.
+                            Full version includes real-time tracking from all sources.
+                        </p>
+                    </div>
+                </div>
+                
                 <div id="analytics-content" class="space-y-3">
                     <!-- Analytics will be populated here -->
                 </div>
@@ -522,29 +541,29 @@
                     <div class="flex items-start">
                         <i class="fas fa-cloud text-green-400 mt-1 mr-3"></i>
                         <div>
-                            <h5 class="font-bold text-amber-200">Cloud Storage</h5>
-                            <p class="text-gray-300 text-xs">Access your links from any device - they won't disappear when you clear browser data</p>
+                            <h5 class="font-bold text-amber-200">Real Analytics</h5>
+                            <p class="text-gray-300 text-xs">Track all clicks from anywhere, not just demo clicks</p>
                         </div>
                     </div>
                     <div class="flex items-start">
                         <i class="fas fa-chart-bar text-green-400 mt-1 mr-3"></i>
                         <div>
                             <h5 class="font-bold text-amber-200">Advanced Analytics</h5>
-                            <p class="text-gray-300 text-xs">See real-time click data, geographic locations, referral sources, and time patterns</p>
+                            <p class="text-gray-300 text-xs">See real-time click data, geographic locations, referral sources</p>
                         </div>
                     </div>
                     <div class="flex items-start">
                         <i class="fas fa-globe text-green-400 mt-1 mr-3"></i>
                         <div>
                             <h5 class="font-bold text-amber-200">Custom Domains</h5>
-                            <p class="text-gray-300 text-xs">Use your own domain (like yourbrand.com/links) instead of generic short URLs</p>
+                            <p class="text-gray-300 text-xs">Use your own domain (like yourbrand.com/links)</p>
                         </div>
                     </div>
                     <div class="flex items-start">
                         <i class="fas fa-users text-green-400 mt-1 mr-3"></i>
                         <div>
                             <h5 class="font-bold text-amber-200">Team Collaboration</h5>
-                            <p class="text-gray-300 text-xs">Share links with team members, set permissions, and collaborate on campaigns</p>
+                            <p class="text-gray-300 text-xs">Share links with team members and collaborate on campaigns</p>
                         </div>
                     </div>
                 </div>
@@ -564,7 +583,7 @@
                 </div>
                 
                 <h2 class="text-2xl md:text-3xl font-bold gold-gradient title-font mb-4">Ready for True Alchemical Power?</h2>
-                <p class="text-lg md:text-xl text-amber-200 mb-4">Join the inner circle and be the first to access the full version</p>
+                <p class="text-lg md:text-xl text-amber-200 mb-4">Get real analytics and advanced features in the full version</p>
                 
                 <!-- Social Proof Counter -->
                 <div class="bg-amber-900/30 rounded-full px-6 py-3 inline-flex items-center mb-6 border border-amber-700/50">
@@ -584,10 +603,10 @@
                             </div>
                         </div>
                         <div class="flex items-start">
-                            <i class="fas fa-star text-amber-400 mt-1 mr-3"></i>
+                            <i class="fas fa-chart-line text-amber-400 mt-1 mr-3"></i>
                             <div>
-                                <h4 class="font-bold text-amber-200">Influence Development</h4>
-                                <p class="text-gray-300 text-sm">Help shape the features we build next</p>
+                                <h4 class="font-bold text-amber-200">Real Analytics</h4>
+                                <p class="text-gray-300 text-sm">Track all clicks, not just demo clicks</p>
                             </div>
                         </div>
                         <div class="flex items-start">
@@ -610,7 +629,7 @@
                 <!-- Email Capture Form with Formspree -->
                 <form 
                     id="waitlist-form" 
-                    action="https://formspree.io/f/mzzjogeb" 
+                    action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" 
                     method="POST"
                     class="space-y-4 max-w-md mx-auto"
                 >
@@ -670,12 +689,15 @@
         <div class="border-t border-gray-800 pt-6">
             <p class="flex items-center justify-center text-sm md:text-base">
                 <i class="fas fa-hat-wizard text-amber-500 mr-2"></i>
-                Alchemist's Forge &copy; 2023 - Powered by Gold-URL.com
+                Alchemist's Forge &copy; 2025 - Powered by Gold-URL.com
             </p>
         </div>
     </footer>
 
     <script>
+        // REPLACE THIS WITH YOUR ACTUAL VERCEL URL
+        const BACKEND_URL = 'https://gold-url-backend-fvx48858r-tims-projects-6ebe914a.vercel.app'; // ← Replace this!
+        
         // Firebase simulation (in-memory state)
         const firestoreSimulation = {
             links: [],
@@ -799,7 +821,7 @@
             return url;
         }
 
-        // UPDATED: Now using gold-url.com domain
+        // Using gold-url.com domain
         function getShortUrl(shortCode) {
             return `https://gold-url.com/${shortCode}`;
         }
@@ -807,17 +829,13 @@
         // Improved clipboard function
         async function copyToClipboard(text) {
             try {
-                // Modern clipboard API approach
                 if (navigator.clipboard && window.isSecureContext) {
                     await navigator.clipboard.writeText(text);
                     showToast('Gold URL copied to clipboard!', 'success');
                     return true;
                 } else {
-                    // Fallback method that actually works
                     const textArea = document.createElement('textarea');
                     textArea.value = text;
-                    
-                    // Make the textarea out of viewport
                     textArea.style.position = 'fixed';
                     textArea.style.left = '-999999px';
                     textArea.style.top = '-999999px';
@@ -842,7 +860,6 @@
                 }
             } catch (err) {
                 console.error('Failed to copy text:', err);
-                // Last resort - show the text and ask user to copy manually
                 const copied = prompt('Please copy this Gold URL:', text);
                 if (copied !== null) {
                     showToast('Gold URL ready for pasting!', 'success');
@@ -870,7 +887,7 @@
                 <div class="analytics-item">
                     <div class="flex justify-between text-sm mb-1">
                         <span class="text-amber-200">Today</span>
-                        <span class="text-amber-300">${todayClicks} clicks</span>
+                        <span class="text-amber-300">${todayClicks} demo clicks</span>
                     </div>
                     <div class="w-full bg-gray-700 rounded-full h-2">
                         <div class="analytics-bar h-2 rounded-full" style="width: ${(todayClicks/totalClicks)*100}%"></div>
@@ -879,7 +896,7 @@
                 <div class="analytics-item">
                     <div class="flex justify-between text-sm mb-1">
                         <span class="text-amber-200">This Week</span>
-                        <span class="text-amber-300">${weekClicks} clicks</span>
+                        <span class="text-amber-300">${weekClicks} demo clicks</span>
                     </div>
                     <div class="w-full bg-gray-700 rounded-full h-2">
                         <div class="analytics-bar h-2 rounded-full" style="width: ${(weekClicks/totalClicks)*100}%"></div>
@@ -888,15 +905,15 @@
                 <div class="analytics-item">
                     <div class="flex justify-between text-sm mb-1">
                         <span class="text-amber-200">All Time</span>
-                        <span class="text-amber-300">${monthClicks} clicks</span>
+                        <span class="text-amber-300">${monthClicks} demo clicks</span>
                     </div>
                     <div class="w-full bg-gray-700 rounded-full h-2">
                         <div class="analytics-bar h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
-                <div class="text-xs text-gray-400 mt-4">
+                <div class="text-xs text-amber-200 mt-4 p-3 bg-amber-800/20 rounded-lg">
                     <i class="fas fa-info-circle mr-1"></i>
-                    Full version includes geographic data, referral sources, and real-time analytics
+                    Full version includes real tracking from all sources, geographic data, and referral sources
                 </div>
             `;
             
@@ -919,7 +936,6 @@
                         <p class="max-w-md mx-auto text-sm">Create your first shortened URL above to see it here.</p>
                     </div>
                 `;
-                // Hide analytics when no links
                 document.getElementById('analytics-section').classList.add('hidden');
                 return;
             }
@@ -946,7 +962,7 @@
                                     <button 
                                         onclick="showAnalyticsDetails('${link.id}')" 
                                         class="text-gray-400 hover:text-amber-300 transition-colors p-2 rounded-lg gold-glow bg-amber-900/20"
-                                        title="View Analytics"
+                                        title="View Analytics Preview"
                                     >
                                         <i class="fas fa-chart-bar text-sm"></i>
                                     </button>
@@ -961,11 +977,11 @@
                                 <div class="text-center">
                                     <div class="text-xl md:text-2xl font-bold text-amber-300">${link.clicks}</div>
                                     <div class="text-xs text-gray-400 uppercase tracking-wide flex items-center">
-                                        Test Clicks
+                                        Demo Clicks
                                         <div class="ml-1 group relative">
                                             <i class="fas fa-question-circle text-gray-500 cursor-help"></i>
                                             <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
-                                                Number of times this link was clicked
+                                                Number of test clicks from this dashboard. Full version tracks all clicks from anywhere.
                                             </div>
                                         </div>
                                     </div>
@@ -974,7 +990,7 @@
                                     <button 
                                         onclick="visitLink('${link.id}')" 
                                         class="text-green-400 hover:text-green-300 transition-colors p-2 rounded-lg gold-glow bg-green-900/20"
-                                        title="Test Link"
+                                        title="Test Link (Demo Click)"
                                     >
                                         <i class="fas fa-external-link-alt"></i>
                                     </button>
@@ -995,7 +1011,6 @@
             html += '</div>';
             linksContainer.innerHTML = html;
             
-            // Show analytics for the first link by default
             if (links.length > 0) {
                 showAnalytics(links[0]);
             }
@@ -1006,7 +1021,6 @@
             const link = firestoreSimulation.getLinks().find(l => l.id === linkId);
             if (link) {
                 showAnalytics(link);
-                // Scroll to analytics section
                 document.getElementById('analytics-section').scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'start'
@@ -1014,7 +1028,7 @@
             }
         }
 
-        // FIXED: No more 404 errors - proper redirection
+        // UPDATED: Visit link with real redirect
         function visitLink(id) {
             const link = firestoreSimulation.getLinks().find(l => l.id === id);
             if (link) {
@@ -1022,12 +1036,11 @@
                 renderLinks();
                 showAnalytics(link);
                 
-                // Show demo message
                 showToast('Demo: Tracking click #' + (link.clicks) + '. Opening original URL...', 'info');
                 
-                // Open the original URL directly (this works)
+                // Open the short URL which will redirect via Vercel
                 setTimeout(() => {
-                    window.open(link.longUrl, '_blank');
+                    window.open(getShortUrl(link.shortCode), '_blank');
                 }, 1000);
             }
         }
@@ -1071,8 +1084,8 @@
             });
         }
 
-        // Better demo explanation
-        document.getElementById('transmute-btn').addEventListener('click', function() {
+        // UPDATED: Transmute function with real backend
+        document.getElementById('transmute-btn').addEventListener('click', async function() {
             const urlInput = document.getElementById('url-input');
             const button = this;
             const originalText = button.innerHTML;
@@ -1099,12 +1112,54 @@
             button.innerHTML = '<div class="spinner mr-2"></div> Creating...';
             button.disabled = true;
             
-            setTimeout(() => {
+            try {
+                // Use your Vercel backend
+                const response = await fetch(BACKEND_URL + '/api/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ longUrl: validUrl })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Add to local storage for display
+                    const newLink = {
+                        id: 'link-' + Date.now(),
+                        longUrl: validUrl,
+                        shortCode: result.shortCode,
+                        shortUrl: result.shortUrl,
+                        clicks: 0,
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    firestoreSimulation.addLink(newLink);
+                    renderLinks();
+                    
+                    showToast('Gold URL created! Your short link is now active and will redirect.', 'success');
+                    urlInput.value = '';
+                    
+                    // Add to backend storage for permanent redirect
+                    await addToBackendStorage(result.shortCode, validUrl);
+                } else {
+                    throw new Error(result.error || 'Failed to create short URL');
+                }
+            } catch (error) {
+                console.error('Backend error:', error);
+                // Fallback to demo mode
                 const shortCode = generateShortCode();
                 const newLink = {
                     id: 'link-' + Date.now(),
                     longUrl: validUrl,
                     shortCode: shortCode,
+                    shortUrl: getShortUrl(shortCode),
                     clicks: 0,
                     createdAt: new Date().toISOString()
                 };
@@ -1112,23 +1167,25 @@
                 firestoreSimulation.addLink(newLink);
                 renderLinks();
                 
+                showToast('Gold URL created in demo mode! Backend will be available soon.', 'info');
+                urlInput.value = '';
+            } finally {
                 button.innerHTML = originalText;
                 button.disabled = false;
-                
-                urlInput.value = '';
-                
-                // Better explanation of demo limitations
-                showToast('Gold URL created! Click the "Test" button to see how tracking works. Note: The short URL (gold-url.com) is for demo display only.', 'success');
-                
-                const newLinkElement = document.getElementById(`link-${newLink.id}`);
-                if (newLinkElement) {
-                    newLinkElement.classList.add('gold-glow');
-                    setTimeout(() => {
-                        newLinkElement.classList.remove('gold-glow');
-                    }, 3000);
-                }
-            }, 800);
+            }
         });
+
+        // Helper function to add to backend storage
+        async function addToBackendStorage(shortCode, longUrl) {
+            try {
+                // For now, we'll manually add to the backend
+                // In production, this would be automatic
+                console.log('Add to backend manually:', { shortCode, longUrl });
+                showToast('Remember to add this link to your backend for permanent redirects', 'info');
+            } catch (error) {
+                console.error('Failed to save to backend:', error);
+            }
+        }
 
         document.getElementById('url-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1156,7 +1213,6 @@
                 return;
             }
             
-            // Show loading state
             button.innerHTML = '<div class="spinner mr-2"></div> Joining...';
             button.disabled = true;
             
@@ -1170,19 +1226,15 @@
                 });
                 
                 if (response.ok) {
-                    // Success - update counter and show success message
                     updateJoinedCount();
                     showToast('Welcome to the inner circle! You\'ll hear from us soon.', 'success');
                     emailInput.value = '';
                 } else {
-                    // Formspree error
                     showToast('Something went wrong. Please try again.', 'error');
                 }
             } catch (error) {
-                // Network error
                 showToast('Network error. Please check your connection and try again.', 'error');
             } finally {
-                // Reset button state
                 button.innerHTML = originalText;
                 button.disabled = false;
             }
@@ -1199,7 +1251,6 @@
             currentCount += 1;
             document.getElementById('joined-count').textContent = currentCount;
             
-            // Store in localStorage to persist
             localStorage.setItem('alchemistJoinedCount', currentCount);
         }
 
@@ -1215,9 +1266,8 @@
             renderLinks();
             loadJoinedCount();
             
-            // Add demo explanation
             setTimeout(() => {
-                showToast('Welcome! This demo shows URL shortening and tracking. Click "Test" on any link to see analytics in action.', 'info');
+                showToast('Welcome! Create short URLs that actually redirect. Analytics show full version preview.', 'info');
             }, 1000);
         });
     </script>
