@@ -787,8 +787,8 @@
     </footer>
 
     <script>
-        // REPLACE THIS WITH YOUR ACTUAL VERCEL URL
-        const BACKEND_URL = 'https://gold-url-backend-fvx48858r-tims-projects-6ebe914a.vercel.app';
+        // ✅ CHANGED: Replace with your actual Vercel backend URL
+        const BACKEND_URL = 'https://gold-url-backend-78yrv2bh4-tims-projects-6ebe914a.vercel.app'; // ⚠️ REPLACE THIS WITH YOUR ACTUAL BACKEND URL
         
         // Configuration
         const MAX_FREE_LINKS = 10;
@@ -1154,7 +1154,7 @@
             }
         }
 
-        // UPDATED: Visit link with real redirect
+        // ✅ UPDATED: Visit link with real redirect using your backend
         function visitLink(id) {
             const link = firestoreSimulation.getLinks().find(l => l.id === id);
             if (link) {
@@ -1164,7 +1164,7 @@
                 
                 showToast('Demo: Tracking click #' + (link.clicks) + '. Opening original URL...', 'info');
                 
-                // Open the short URL which will redirect via Vercel
+                // Open the short URL which will redirect via your Vercel backend
                 setTimeout(() => {
                     window.open(getShortUrl(link.shortCode), '_blank');
                 }, 1000);
@@ -1227,7 +1227,7 @@
             modal.classList.add('hidden');
         }
 
-        // UPDATED: Transmute function with conversion triggers
+        // ✅ UPDATED: Transmute function with improved error handling for your backend
         document.getElementById('transmute-btn').addEventListener('click', async function() {
             const urlInput = document.getElementById('url-input');
             const button = this;
@@ -1264,15 +1264,20 @@
             button.disabled = true;
             
             try {
-                // Use your Vercel backend
+                // ✅ CHANGED: Use your Vercel backend with CORS support
                 const response = await fetch(BACKEND_URL + '/api/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({ longUrl: validUrl })
                 });
+                
+                // Check for 401 specifically
+                if (response.status === 401) {
+                    throw new Error('Authentication failed - check your backend configuration');
+                }
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -1305,14 +1310,21 @@
                     }
                     
                     urlInput.value = '';
-                    
-                    // Add to backend storage for permanent redirect
-                    await addToBackendStorage(result.shortCode, validUrl);
                 } else {
                     throw new Error(result.error || 'Failed to create short URL');
                 }
             } catch (error) {
                 console.error('Backend error:', error);
+                
+                // Enhanced error messages
+                if (error.message.includes('Authentication failed')) {
+                    showToast('Backend authentication issue. Using demo mode. Check your Vercel configuration.', 'error');
+                } else if (error.message.includes('Failed to fetch')) {
+                    showToast('Cannot reach backend server. Using demo mode. Check your backend URL.', 'error');
+                } else {
+                    showToast('Backend temporarily unavailable. Using demo mode.', 'info');
+                }
+                
                 // Fallback to demo mode
                 const shortCode = generateShortCode();
                 const newLink = {
@@ -1339,23 +1351,6 @@
                 button.disabled = false;
             }
         });
-
-        // Helper function to add to backend storage
-        async function addToBackendStorage(shortCode, longUrl) {
-            try {
-                // For now, we'll manually add to the backend
-                // In production, this would be automatic
-                console.log('Add to backend manually:', { shortCode, longUrl });
-                
-                // Only show this message to power users
-                const currentLinks = firestoreSimulation.getLinks().length;
-                if (currentLinks >= CONVERSION_TRIGGER) {
-                    showToast('Remember to add this link to your backend for permanent redirects', 'info');
-                }
-            } catch (error) {
-                console.error('Failed to save to backend:', error);
-            }
-        }
 
         document.getElementById('url-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1448,7 +1443,7 @@
                     emailInput.value = '';
                 } else {
                     showToast('Something went wrong. Please try again.', 'error');
-                }
+                    }
             } catch (error) {
                 showToast('Network error. Please check your connection and try again.', 'error');
             } finally {
