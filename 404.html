@@ -3,19 +3,42 @@
 <head>
     <title>Redirecting...</title>
     <script>
-        // Get the current path (like /abc123)
         const path = window.location.pathname;
-        
-        // Remove the leading slash to get the short code
         const shortCode = path.replace(/^\//, '');
         
-        // Only redirect if this looks like a short code (not empty and not the main page)
         if (shortCode && shortCode !== 'index.html') {
-            // Redirect to your Google Apps Script
-            window.location.href = `https://script.google.com/macros/s/AKfycbxXY0PybSwzsMXzv_7cLbHKLyNA0nzUKf6Gb5O1R1EIfVMogpwl-18qt0IkVeFRD37d/exec/${shortCode}`;
+            // Directly call Google Apps Script to get the redirect URL
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxXY0PybSwzsMXzv_7cLbHKLyNA0nzUKf6Gb5O1R1EIfVMogpwl-18qt0IkVeFRD37d/exec';
+            
+            fetch(`${scriptUrl}?path=${shortCode}`)
+                .then(response => response.text())
+                .then(html => {
+                    // Try to extract the redirect URL from the HTML
+                    const match = html.match(/window\.location\.href\s*=\s*'([^']+)'/);
+                    if (match && match[1]) {
+                        window.location.href = match[1];
+                    } else {
+                        // If no redirect found, show the HTML content
+                        document.write(html);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotFound();
+                });
         } else {
-            // If no short code, go back to main site
             window.location.href = 'https://gold-url.com';
+        }
+        
+        function showNotFound() {
+            document.body.innerHTML = `
+                <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                    <h1>🔗 Gold URL</h1>
+                    <h2>Link Not Found</h2>
+                    <p>This short URL doesn't exist or has expired.</p>
+                    <p><a href="https://gold-url.com">Create your own short URLs</a></p>
+                </div>
+            `;
         }
     </script>
 </head>
