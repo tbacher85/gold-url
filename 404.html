@@ -8,7 +8,7 @@
         
         if (shortCode && shortCode !== 'index.html') {
             // Directly call Google Apps Script to get the redirect URL
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxXY0PybSwzsMXzv_7cLbHKLyNA0nzUKf6Gb5O1R1EIfVMogpwl-18qt0IkVeFRD37d/exec';
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxSDPAMDjF3CzMp5Bg1TpWdbALu_jxPVRbJb8q-VbmznCrwpssWkwRcDisIgOYJfxkPEQ/exec';
             
             fetch(`${scriptUrl}?path=${shortCode}`)
                 .then(response => response.text())
