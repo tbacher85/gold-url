@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        // Get the current path (like /abc123)
+        const path = window.location.pathname;
+        
+        // Remove the leading slash to get the short code
+        const shortCode = path.replace(/^\//, '');
+        
+        // Only redirect if this looks like a short code (not empty and not the main page)
+        if (shortCode && shortCode !== 'index.html') {
+            // Redirect to your Google Apps Script
+            window.location.href = `https://script.google.com/macros/s/AKfycbwmFB57_4TcMYg9fvwM5jTiII6IwSLvOdtxuLpyP2WeZV8VZrldnu6CgNYXEayRtrFToQ/exec/${shortCode}`;
+        } else {
+            // If no short code, go back to main site
+            window.location.href = 'https://gold-url.com';
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
