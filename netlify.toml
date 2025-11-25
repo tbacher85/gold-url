@@ -3,5 +3,5 @@
 
 [[redirects]]
   from = "/:code"
-  to = "/.netlify/functions/redirect"
+  to = "/.netlify/functions/redirect/:code"
   status = 200
