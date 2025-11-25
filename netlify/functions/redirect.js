@@ -1,15 +1,23 @@
 // netlify/functions/redirect.js
-
-// This would ideally be a database - using in-memory for now
-let urlMappings = {
-    'test': 'https://google.com',
-    'demo': 'https://github.com'
-};
-
 exports.handler = async (event) => {
-    const shortCode = event.path.split('/').pop();
+    console.log('Redirect function called with path:', event.path);
     
-    console.log('Looking for short code:', shortCode);
+    // Extract the short code from the URL path
+    // Example: /abc123 → abc123
+    const pathParts = event.path.split('/');
+    const shortCode = pathParts[pathParts.length - 1];
+    
+    console.log('Extracted short code:', shortCode);
+    
+    // Temporary storage - we'll replace this with a database later
+    // Add your test mappings here
+    const urlMappings = {
+        'test': 'https://google.com',
+        'demo': 'https://github.com',
+        'example': 'https://example.com'
+        // Add more test mappings as needed
+    };
+    
     console.log('Available mappings:', Object.keys(urlMappings));
     
     const targetUrl = urlMappings[shortCode];
@@ -25,12 +33,12 @@ exports.handler = async (event) => {
         };
     }
     
-    // Not found
-    console.log('Short code not found:', shortCode);
+    // Not found - redirect to main site
+    console.log('Short code not found, redirecting to main site');
     return {
         statusCode: 302,
         headers: {
-            'Location': 'https://your-site.netlify.app',
+            'Location': process.env.URL || 'https://your-site.netlify.app',
             'Cache-Control': 'no-cache'
         }
     };
