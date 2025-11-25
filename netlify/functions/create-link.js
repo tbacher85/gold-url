@@ -1,12 +1,39 @@
 // netlify/functions/create-link.js
+const fs = require('fs');
+const path = require('path');
 
-// Simple in-memory storage (will reset on server restart)
-// In production, replace with a database
-let urlMappings = {
-    'test': 'https://google.com',
-    'demo': 'https://github.com',
-    'example': 'https://example.com'
-};
+// Path to our storage file
+const STORAGE_FILE = path.join('/tmp', 'url-mappings.json');
+
+// Helper function to read from storage
+function readMappings() {
+    try {
+        if (fs.existsSync(STORAGE_FILE)) {
+            const data = fs.readFileSync(STORAGE_FILE, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (error) {
+        console.log('Error reading storage:', error);
+    }
+    
+    // Return default mappings if file doesn't exist
+    return {
+        'test': 'https://google.com',
+        'demo': 'https://github.com',
+        'example': 'https://example.com'
+    };
+}
+
+// Helper function to write to storage
+function writeMappings(mappings) {
+    try {
+        fs.writeFileSync(STORAGE_FILE, JSON.stringify(mappings, null, 2));
+        return true;
+    } catch (error) {
+        console.log('Error writing storage:', error);
+        return false;
+    }
+}
 
 exports.handler = async (event) => {
     console.log('Create-link function called');
@@ -33,21 +60,32 @@ exports.handler = async (event) => {
             
             console.log('Creating link:', shortCode, '->', longUrl);
             
-            // Store the mapping
-            urlMappings[shortCode] = longUrl;
+            // Read current mappings
+            const mappings = readMappings();
             
-            console.log('Current mappings:', Object.keys(urlMappings));
+            // Add new mapping
+            mappings[shortCode] = longUrl;
             
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify({
-                    success: true,
-                    shortCode: shortCode,
-                    shortUrl: `${process.env.URL || 'https://your-site.netlify.app'}/${shortCode}`,
-                    longUrl: longUrl
-                })
-            };
+            // Save back to storage
+            const saved = writeMappings(mappings);
+            
+            if (saved) {
+                console.log('Successfully saved. Current mappings:', Object.keys(mappings));
+                
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({
+                        success: true,
+                        shortCode: shortCode,
+                        shortUrl: `https://gold-url.netlify.app/${shortCode}`,
+                        longUrl: longUrl,
+                        totalLinks: Object.keys(mappings).length
+                    })
+                };
+            } else {
+                throw new Error('Failed to save mapping');
+            }
         } catch (error) {
             console.error('Error:', error);
             return {
@@ -58,7 +96,20 @@ exports.handler = async (event) => {
         }
     }
 
-    // Method not allowed
+    // GET request - return current mappings for debugging
+    if (event.httpMethod === 'GET') {
+        const mappings = readMappings();
+        return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({
+                mappings: mappings,
+                count: Object.keys(mappings).length,
+                storageFile: STORAGE_FILE
+            })
+        };
+    }
+
     return {
         statusCode: 405,
         headers,
