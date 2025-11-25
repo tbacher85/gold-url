@@ -1,67 +1,46 @@
 // netlify/functions/redirect.js
-const fs = require('fs');
-const path = require('path');
+const { MongoClient } = require('mongodb');
 
-// Path to our storage file - MUST BE EXACTLY THE SAME as create-link.js
-const STORAGE_FILE = path.join('/tmp', 'url-mappings.json');
-
-// Helper function to read from storage - MUST BE EXACTLY THE SAME as create-link.js
-function readMappings() {
-    try {
-        if (fs.existsSync(STORAGE_FILE)) {
-            const data = fs.readFileSync(STORAGE_FILE, 'utf8');
-            return JSON.parse(data);
-        }
-    } catch (error) {
-        console.log('Error reading storage:', error);
-    }
-    
-    // Return default mappings if file doesn't exist
-    return {
-        'test': 'https://google.com',
-        'demo': 'https://github.com',
-        'example': 'https://example.com'
-    };
-}
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
 exports.handler = async (event) => {
-    console.log('=== REDIRECT FUNCTION STARTED ===');
-    console.log('Full path:', event.path);
+  const pathParts = event.path.split('/');
+  const shortCode = pathParts[pathParts.length - 1];
+  
+  try {
+    await client.connect();
+    const database = client.db('url_shortener');
+    const collection = database.collection('url_mappings');
     
-    // Extract the short code from the URL path
-    const pathParts = event.path.split('/');
-    const shortCode = pathParts[pathParts.length - 1];
-    
-    console.log('Looking for short code:', shortCode);
-    
-    // Read mappings from shared storage
-    const mappings = readMappings();
-    
-    console.log('Total mappings in storage:', Object.keys(mappings).length);
-    console.log('All available codes:', Object.keys(mappings));
-    
-    const targetUrl = mappings[shortCode];
-    
-    if (targetUrl) {
-        console.log('✓ FOUND - Redirecting', shortCode, 'to:', targetUrl);
-        return {
-            statusCode: 302,
-            headers: {
-                'Location': targetUrl,
-                'Cache-Control': 'no-cache'
-            }
-        };
-    }
-    
-    // Not found
-    console.log('✗ NOT FOUND - Code', shortCode, 'not in storage. Redirecting to main site.');
-    console.log('Available codes are:', Object.keys(mappings));
-    
-    return {
+    // Find the URL and update click count in one operation
+    const result = await collection.findOneAndUpdate(
+      { shortCode: shortCode },
+      { $inc: { clicks: 1 } },
+      { returnDocument: 'after' }
+    );
+
+    if (result.value && result.value.longUrl) {
+      return {
         statusCode: 302,
         headers: {
-            'Location': 'https://gold-url.netlify.app',
-            'Cache-Control': 'no-cache'
+          'Location': result.value.longUrl,
+          'Cache-Control': 'no-cache'
         }
-    };
+      };
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    await client.close();
+  }
+  
+  // Not found - redirect to main site
+  return {
+    statusCode: 302,
+    headers: {
+      'Location': 'https://gold-url.netlify.app',
+      'Cache-Control': 'no-cache'
+    }
+  };
 };
