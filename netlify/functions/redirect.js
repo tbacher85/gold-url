@@ -1,16 +1,21 @@
-// Serverless function for redirects
+// netlify/functions/redirect.js
 exports.handler = async (event) => {
-    const shortCode = event.path.substring(1); // Remove leading slash
+    // Get the short code from the URL path
+    const shortCode = event.path.split('/').pop();
     
-    // You can store mappings in a JSON file or use a simple key-value store
+    console.log('Looking for short code:', shortCode);
+    
+    // Temporary storage - we'll replace this with a database later
     const redirects = {
         'test': 'https://google.com',
+        'demo': 'https://github.com'
         // Add your mappings here
     };
     
     const targetUrl = redirects[shortCode];
     
     if (targetUrl) {
+        console.log('Redirecting to:', targetUrl);
         return {
             statusCode: 302,
             headers: {
@@ -21,10 +26,11 @@ exports.handler = async (event) => {
     }
     
     // Not found - redirect to main site
+    console.log('Short code not found:', shortCode);
     return {
         statusCode: 302,
         headers: {
-            'Location': 'https://your-domain.netlify.app',
+            'Location': 'https://your-site.netlify.app', // Replace with your actual Netlify URL
             'Cache-Control': 'no-cache'
         }
     };
