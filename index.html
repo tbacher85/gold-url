@@ -787,8 +787,8 @@
     </footer>
 
     <script>
-        // ✅ REPLACE THIS WITH YOUR ACTUAL GOOGLE APPS SCRIPT URL
-        const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxUNzGi3uWatSHlMUFNgz77qe6kywbsuVn0HqP8gWwkwTLmZ7IFdXY0RCW-edjXNc6TRg/exec';
+        // ✅ Netlify Functions URL - No need to change this
+        const BACKEND_URL = '/.netlify/functions/create-link';
         
         // Configuration
         const MAX_FREE_LINKS = 10;
@@ -917,9 +917,9 @@
             return url;
         }
 
-        // Using gold-url.com domain
+        // Using current domain for short URLs
         function getShortUrl(shortCode) {
-            return `https://gold-url.com/${shortCode}`;
+            return `${window.location.origin}/${shortCode}`;
         }
 
         // Improved clipboard function
@@ -968,7 +968,7 @@
             document.getElementById('total-elixirs').textContent = firestoreSimulation.getLinks().length;
         }
 
-        // NEW: Update usage progress
+        // Update usage progress
         function updateUsageProgress() {
             const currentLinks = firestoreSimulation.getLinks().length;
             const progressSection = document.getElementById('usage-progress');
@@ -1154,7 +1154,7 @@
             }
         }
 
-        // UPDATED: Visit link with real redirect
+        // Visit link with Netlify redirect
         function visitLink(id) {
             const link = firestoreSimulation.getLinks().find(l => l.id === id);
             if (link) {
@@ -1162,9 +1162,9 @@
                 renderLinks();
                 showAnalytics(link);
                 
-                showToast('Demo: Tracking click #' + (link.clicks) + '. Opening original URL...', 'info');
+                showToast('Demo: Tracking click #' + (link.clicks) + '. Opening short URL...', 'info');
                 
-                // Open the short URL which will redirect via Google Apps Script
+                // Open the short URL which will redirect via Netlify function
                 setTimeout(() => {
                     window.open(getShortUrl(link.shortCode), '_blank');
                 }, 1000);
@@ -1210,7 +1210,7 @@
             });
         }
 
-        // NEW: Waitlist modal functionality
+        // Waitlist modal functionality
         function showWaitlistModal(context = 'Join the inner circle') {
             const modal = document.getElementById('waitlist-modal');
             modal.classList.remove('hidden');
@@ -1227,7 +1227,7 @@
             modal.classList.add('hidden');
         }
 
-        // UPDATED: Transmute function with Google Apps Script
+        // Transmute function with Netlify Functions
         document.getElementById('transmute-btn').addEventListener('click', async function() {
             const urlInput = document.getElementById('url-input');
             const button = this;
@@ -1264,13 +1264,18 @@
             button.disabled = true;
             
             try {
-                // Use Google Apps Script backend
+                const shortCode = generateShortCode();
+                
+                // Call Netlify function to save the link
                 const response = await fetch(BACKEND_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ longUrl: validUrl })
+                    body: JSON.stringify({ 
+                        longUrl: validUrl, 
+                        shortCode: shortCode 
+                    })
                 });
                 
                 if (response.ok) {
@@ -1280,8 +1285,8 @@
                     const newLink = {
                         id: 'link-' + Date.now(),
                         longUrl: validUrl,
-                        shortCode: result.shortCode,
-                        shortUrl: result.shortUrl,
+                        shortCode: shortCode,
+                        shortUrl: getShortUrl(shortCode),
                         clicks: 0,
                         createdAt: new Date().toISOString()
                     };
@@ -1301,10 +1306,10 @@
                     
                     urlInput.value = '';
                 } else {
-                    throw new Error('Backend failed');
+                    throw new Error('Netlify function failed');
                 }
             } catch (error) {
-                console.error('Backend error:', error);
+                console.error('Netlify function error:', error);
                 // Fallback to demo mode
                 const shortCode = generateShortCode();
                 const newLink = {
@@ -1453,45 +1458,10 @@
             }
         }
 
-        // Handle redirects if someone visits a short URL on your domain
-        function handleRedirects() {
-            const path = window.location.pathname;
-            
-            // If we're on a short URL path (like /abc123)
-            if (path.length > 1 && path !== '/') {
-                const shortCode = path.substring(1); // Remove the leading slash
-                
-                // Look for the link in local storage
-                const links = firestoreSimulation.getLinks();
-                const link = links.find(l => l.shortCode === shortCode);
-                
-                if (link) {
-                    // Update click count
-                    const linkIndex = links.findIndex(l => l.shortCode === shortCode);
-                    if (linkIndex !== -1) {
-                        firestoreSimulation.updateLink(links[linkIndex].id, { 
-                            clicks: links[linkIndex].clicks + 1 
-                        });
-                    }
-                    
-                    // Redirect to the original URL
-                    window.location.href = link.longUrl;
-                } else {
-                    // Link not found - redirect to Google Apps Script
-                    window.location.href = `${BACKEND_URL}?code=${shortCode}`;
-                }
-            }
-        }
-
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             renderLinks();
             loadJoinedCount();
-            
-            // Handle redirects if we're on the main domain
-            if (window.location.hostname === 'gold-url.com') {
-                handleRedirects();
-            }
             
             setTimeout(() => {
                 showToast('Welcome! Create short URLs that actually redirect. Join waitlist for unlimited access.', 'info');
