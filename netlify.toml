@@ -1,7 +1,14 @@
 [build]
   publish = "."
 
+# Handle short code redirects
 [[redirects]]
   from = "/:code"
   to = "/.netlify/functions/redirect/:code"
+  status = 200
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
