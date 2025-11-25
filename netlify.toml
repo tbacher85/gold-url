@@ -1,1 +1,7 @@
+[build]
+  publish = "."
 
+[[redirects]]
+  from = "/:code"
+  to = "/.netlify/functions/redirect"
+  status = 200
