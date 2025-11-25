@@ -2,10 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 
-// Path to our storage file (same as create-link.js)
+// Path to our storage file - MUST BE EXACTLY THE SAME as create-link.js
 const STORAGE_FILE = path.join('/tmp', 'url-mappings.json');
 
-// Helper function to read from storage
+// Helper function to read from storage - MUST BE EXACTLY THE SAME as create-link.js
 function readMappings() {
     try {
         if (fs.existsSync(STORAGE_FILE)) {
@@ -25,7 +25,8 @@ function readMappings() {
 }
 
 exports.handler = async (event) => {
-    console.log('Redirect function called with path:', event.path);
+    console.log('=== REDIRECT FUNCTION STARTED ===');
+    console.log('Full path:', event.path);
     
     // Extract the short code from the URL path
     const pathParts = event.path.split('/');
@@ -36,12 +37,13 @@ exports.handler = async (event) => {
     // Read mappings from shared storage
     const mappings = readMappings();
     
-    console.log('Available mappings:', Object.keys(mappings));
+    console.log('Total mappings in storage:', Object.keys(mappings).length);
+    console.log('All available codes:', Object.keys(mappings));
     
     const targetUrl = mappings[shortCode];
     
     if (targetUrl) {
-        console.log('✓ FOUND - Redirecting to:', targetUrl);
+        console.log('✓ FOUND - Redirecting', shortCode, 'to:', targetUrl);
         return {
             statusCode: 302,
             headers: {
@@ -52,7 +54,9 @@ exports.handler = async (event) => {
     }
     
     // Not found
-    console.log('✗ NOT FOUND - Redirecting to main site');
+    console.log('✗ NOT FOUND - Code', shortCode, 'not in storage. Redirecting to main site.');
+    console.log('Available codes are:', Object.keys(mappings));
+    
     return {
         statusCode: 302,
         headers: {
