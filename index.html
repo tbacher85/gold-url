@@ -919,7 +919,8 @@
 
         // Using current domain for short URLs
         function getShortUrl(shortCode) {
-            return `${window.location.origin}/${shortCode}`;
+            // Use your actual Netlify domain
+            return `https://gold-url.netlify.app/${shortCode}`;
         }
 
         // Improved clipboard function
