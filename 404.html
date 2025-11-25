@@ -9,7 +9,7 @@
         
         if (shortCode && !['', 'index.html', '404.html'].includes(shortCode)) {
             // Use your GAS deployment URL - make sure this matches your ACTUAL deployment
-            const gasUrl = 'https://script.google.com/macros/s/AKfycbya149JBhdOhkphqQOusSoouy4b9ARAdBFmxhniUwpyud0uUdrTy0HrfBuGtOD27S_j4A/exec';
+            const gasUrl = 'https://script.google.com/macros/s/AKfycbzWC-H0ufTTBd7sFoLtkv038LlhEFqOlbHCjoRneDER_PsYfCw-lV8FOBl9Oo8Mo04Jaw/exec';
             window.location.href = `${gasUrl}?path=${encodeURIComponent(shortCode)}`;
         } else {
             window.location.href = 'https://gold-url.com';
