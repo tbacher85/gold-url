@@ -8,14 +8,13 @@
         const shortCode = path.replace(/^\//, '').split('/')[0]; // Get first path segment
         
         if (shortCode && !['', 'index.html', '404.html'].includes(shortCode)) {
-            // Use your NEW GAS deployment URL
-            const gasUrl = 'https://script.google.com/macros/s/AKfycbwkvoN8FzgQ5y7hCU6dAHwoJGsYDRm8vlav37b1xhS5Vq4eZ0PE-xGiIV4Z95Vp-8GmhQ/exec';
+            // Use your GAS deployment URL - make sure this matches your ACTUAL deployment
+            const gasUrl = 'https://script.google.com/macros/s/AKfycbya149JBhdOhkphqQOusSoouy4b9ARAdBFmxhniUwpyud0uUdrTy0HrfBuGtOD27S_j4A/exec';
             window.location.href = `${gasUrl}?path=${encodeURIComponent(shortCode)}`;
         } else {
             window.location.href = 'https://gold-url.com';
         }
     </script>
-    <meta http-equiv="refresh" content="0;url=https://gold-url.com">
 </head>
 <body>
     <p>Redirecting... <a href="https://gold-url.com">Click here if not redirected</a>.</p>
