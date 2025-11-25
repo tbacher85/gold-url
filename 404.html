@@ -3,14 +3,14 @@
 <head>
     <title>Redirecting...</title>
     <script>
-        // Get the short code from URL path
+        // Get short code from URL
         const path = window.location.pathname;
-        const shortCode = path.replace(/^\//, '').replace('/index.html', '');
+        const shortCode = path.replace(/^\//, '').split('/')[0]; // Get first path segment
         
-        if (shortCode && shortCode !== '' && shortCode !== '404.html') {
-            // Direct redirect to Google Apps Script
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx7PgWakVc7mIhf8GVOcd5ExfEwJqKOYwCST8FNUNlDbyJ8MCTXyQV8659ctrFeTP8/exec';
-            window.location.href = `${scriptUrl}?path=${encodeURIComponent(shortCode)}`;
+        if (shortCode && !['', 'index.html', '404.html'].includes(shortCode)) {
+            // Use your NEW GAS deployment URL
+            const gasUrl = 'https://script.google.com/macros/s/AKfycbwkvoN8FzgQ5y7hCU6dAHwoJGsYDRm8vlav37b1xhS5Vq4eZ0PE-xGiIV4Z95Vp-8GmhQ/exec';
+            window.location.href = `${gasUrl}?path=${encodeURIComponent(shortCode)}`;
         } else {
             window.location.href = 'https://gold-url.com';
         }
@@ -18,6 +18,6 @@
     <meta http-equiv="refresh" content="0;url=https://gold-url.com">
 </head>
 <body>
-    <p>Redirecting... If you are not redirected, <a href="https://gold-url.com">click here</a>.</p>
+    <p>Redirecting... <a href="https://gold-url.com">Click here if not redirected</a>.</p>
 </body>
 </html>
