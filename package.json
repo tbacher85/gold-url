@@ -1,7 +1,8 @@
 {
-  "name": "netlify-functions",
+  "name": "gold-url-shortener",
   "version": "1.0.0",
+  "description": "URL shortener with Netlify functions",
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.0"
+    "mongodb": "^4.17.1"
   }
 }
