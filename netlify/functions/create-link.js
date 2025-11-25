@@ -1,15 +1,20 @@
-// Simple in-memory storage (reset on server restart)
-// We'll replace this with a database later
+// netlify/functions/create-link.js
+
+// Simple in-memory storage (will reset on server restart)
+// In production, replace with a database
 let urlMappings = {
     'test': 'https://google.com',
-    'demo': 'https://github.com'
+    'demo': 'https://github.com',
+    'example': 'https://example.com'
 };
 
 exports.handler = async (event) => {
+    console.log('Create-link function called');
+    
     // Handle CORS
     const headers = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'
     };
 
@@ -31,17 +36,20 @@ exports.handler = async (event) => {
             // Store the mapping
             urlMappings[shortCode] = longUrl;
             
+            console.log('Current mappings:', Object.keys(urlMappings));
+            
             return {
                 statusCode: 200,
                 headers,
                 body: JSON.stringify({
                     success: true,
                     shortCode: shortCode,
-                    shortUrl: `https://your-site.netlify.app/${shortCode}`,
+                    shortUrl: `${process.env.URL || 'https://your-site.netlify.app'}/${shortCode}`,
                     longUrl: longUrl
                 })
             };
         } catch (error) {
+            console.error('Error:', error);
             return {
                 statusCode: 500,
                 headers,
@@ -50,6 +58,7 @@ exports.handler = async (event) => {
         }
     }
 
+    // Method not allowed
     return {
         statusCode: 405,
         headers,
