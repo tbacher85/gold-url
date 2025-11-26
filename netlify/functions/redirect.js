@@ -1,14 +1,16 @@
 // netlify/functions/redirect.js
+const { google } = require('googleapis');
+
 exports.handler = async (event) => {
   const pathParts = event.path.split('/');
   const shortCode = pathParts[pathParts.length - 1];
   
   // Skip favicon and other non-shortcode paths
-  if (['favicon.ico', 'index.html', '404.html'].includes(shortCode)) {
+  if (['favicon.ico', 'index.html', '404.html', '.netlify'].includes(shortCode) || !shortCode) {
     return {
       statusCode: 302,
       headers: {
-        'Location': 'https://gold-url.netlify.app',
+        'Location': `https://${event.headers.host}`,
         'Cache-Control': 'no-cache'
       }
     };
@@ -17,39 +19,51 @@ exports.handler = async (event) => {
   console.log('Looking for short code:', shortCode);
   
   try {
-    // Get mappings from JSONBin
-    const response = await fetch(`https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}/latest`, {
-      headers: { 
-        'X-Master-Key': process.env.JSONBIN_API_KEY,
-        'Content-Type': 'application/json'
+    // Authenticate with Google Sheets
+    const auth = new google.auth.GoogleAuth({
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n')
       }
     });
+
+    const sheets = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+    // Get all mappings from the sheet
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Sheet1!A:C', // Adjust if your sheet name is different
+    });
+
+    const rows = response.data.values || [];
+    console.log(`Found ${rows.length} rows in sheet`);
+
+    // Skip header row if it exists
+    const startIndex = rows[0] && rows[0][0] === 'shortCode' ? 1 : 0;
     
-    if (!response.ok) {
-      throw new Error(`JSONBin API error: ${response.status}`);
+    // Find the target URL by shortCode (column A)
+    for (let i = startIndex; i < rows.length; i++) {
+      const row = rows[i];
+      if (row[0] === shortCode) {
+        const targetUrl = row[1];
+        console.log('✓ FOUND - Redirecting to:', targetUrl);
+        
+        return {
+          statusCode: 302,
+          headers: {
+            'Location': targetUrl,
+            'Cache-Control': 'no-cache'
+          }
+        };
+      }
     }
-    
-    const data = await response.json();
-    const mappings = data.record.mappings || {};
-    
-    console.log('Available mappings:', Object.keys(mappings));
-    
-    const targetUrl = mappings[shortCode];
-    
-    if (targetUrl) {
-      console.log('✓ FOUND - Redirecting to:', targetUrl);
-      return {
-        statusCode: 302,
-        headers: {
-          'Location': targetUrl,
-          'Cache-Control': 'no-cache'
-        }
-      };
-    } else {
-      console.log('✗ NOT FOUND - Code not in mappings');
-    }
+
+    console.log('✗ NOT FOUND - Code not in sheet:', shortCode);
+
   } catch (error) {
-    console.error('Error fetching from JSONBin:', error);
+    console.error('Error fetching from Google Sheets:', error);
   }
   
   // Not found - redirect to main site
@@ -57,7 +71,7 @@ exports.handler = async (event) => {
   return {
     statusCode: 302,
     headers: {
-      'Location': 'https://gold-url.netlify.app',
+      'Location': `https://${event.headers.host}`,
       'Cache-Control': 'no-cache'
     }
   };
