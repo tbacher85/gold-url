@@ -1,4 +1,6 @@
 // netlify/functions/create-link.js
+const { google } = require('googleapis');
+
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -6,6 +8,7 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Headers': 'Content-Type'
   };
 
+  // Handle preflight OPTIONS request
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
@@ -16,58 +19,60 @@ exports.handler = async (event) => {
       
       console.log('Creating link:', shortCode, '->', longUrl);
       
-      // Get current mappings from JSONBin
-      const getResponse = await fetch(`https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}/latest`, {
-        headers: { 
-          'X-Master-Key': process.env.JSONBIN_API_KEY,
-          'Content-Type': 'application/json'
+      // Validate input
+      if (!longUrl || !shortCode) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Missing longUrl or shortCode' })
+        };
+      }
+
+      // Authenticate with Google Sheets
+      const auth = new google.auth.GoogleAuth({
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        credentials: {
+          client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+          private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n')
         }
       });
-      
-      if (!getResponse.ok) {
-        throw new Error(`Failed to fetch mappings: ${getResponse.status}`);
-      }
-      
-      const data = await getResponse.json();
-      const mappings = data.record.mappings || {};
-      
-      console.log('Current mappings count:', Object.keys(mappings).length);
-      
-      // Add new mapping
-      mappings[shortCode] = longUrl;
-      
-      // Update JSONBin
-      const updateResponse = await fetch(`https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': process.env.JSONBIN_API_KEY
-        },
-        body: JSON.stringify({ mappings })
+
+      const sheets = google.sheets({ version: 'v4', auth });
+      const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+      // Append the new link as a new row
+      const response = await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'Sheet1!A:C', // Adjust if your sheet name is different
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS',
+        resource: {
+          values: [[shortCode, longUrl, new Date().toISOString()]]
+        }
       });
-      
-      if (!updateResponse.ok) {
-        throw new Error(`Failed to update mappings: ${updateResponse.status}`);
-      }
-      
-      console.log('Successfully saved to JSONBin');
-      
+
+      console.log('Successfully saved to Google Sheet:', response.data);
+
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           success: true,
           shortCode: shortCode,
-          shortUrl: `https://gold-url.netlify.app/${shortCode}`,
+          shortUrl: `https://${event.headers.host}/${shortCode}`,
           longUrl: longUrl
         })
       };
+
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error creating link:', error);
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: error.message })
+        body: JSON.stringify({ 
+          error: 'Failed to create link',
+          details: error.message 
+        })
       };
     }
   }
