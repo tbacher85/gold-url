@@ -1,12 +1,5 @@
 // netlify/functions/create-link.js
-const { MongoClient } = require('mongodb');
-
-// Connection URI from MongoDB Atlas dashboard
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-
 exports.handler = async (event) => {
-  // Handle CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -21,18 +14,44 @@ exports.handler = async (event) => {
     try {
       const { longUrl, shortCode } = JSON.parse(event.body);
       
-      await client.connect();
-      const database = client.db('url_shortener');
-      const collection = database.collection('url_mappings');
+      console.log('Creating link:', shortCode, '->', longUrl);
       
-      // Insert the new URL mapping
-      const result = await collection.insertOne({
-        shortCode: shortCode,
-        longUrl: longUrl,
-        clicks: 0,
-        createdAt: new Date()
+      // Get current mappings from JSONBin
+      const getResponse = await fetch(`https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}/latest`, {
+        headers: { 
+          'X-Master-Key': process.env.JSONBIN_API_KEY,
+          'Content-Type': 'application/json'
+        }
       });
-
+      
+      if (!getResponse.ok) {
+        throw new Error(`Failed to fetch mappings: ${getResponse.status}`);
+      }
+      
+      const data = await getResponse.json();
+      const mappings = data.record.mappings || {};
+      
+      console.log('Current mappings count:', Object.keys(mappings).length);
+      
+      // Add new mapping
+      mappings[shortCode] = longUrl;
+      
+      // Update JSONBin
+      const updateResponse = await fetch(`https://api.jsonbin.io/v3/b/${process.env.JSONBIN_BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': process.env.JSONBIN_API_KEY
+        },
+        body: JSON.stringify({ mappings })
+      });
+      
+      if (!updateResponse.ok) {
+        throw new Error(`Failed to update mappings: ${updateResponse.status}`);
+      }
+      
+      console.log('Successfully saved to JSONBin');
+      
       return {
         statusCode: 200,
         headers,
@@ -50,8 +69,6 @@ exports.handler = async (event) => {
         headers,
         body: JSON.stringify({ error: error.message })
       };
-    } finally {
-      await client.close();
     }
   }
 
