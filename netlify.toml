@@ -2,19 +2,20 @@
   publish = "."
   functions = "netlify/functions"
 
+# Domain redirects first (more specific)
+[[redirects]]
+  from = "https://gold-url.netlify.app/*"
+  to = "https://gold-url.com/:splat"
+  status = 301
+
+# Short code redirects
 [[redirects]]
   from = "/:code"
   to = "/.netlify/functions/redirect/:code"
   status = 200
 
+# SPA fallback (catch-all - should be LAST)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# ... your existing build settings and other configurations ...
-
-[[redirects]]
-  from = "https://gold-url.netlify.app/*"
-  to = "https://gold-url.com/:splat"
-  status = 301
