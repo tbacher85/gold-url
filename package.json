@@ -1,8 +1,0 @@
-{
-  "name": "gold-url-shortener",
-  "version": "1.0.0",
-  "description": "URL shortener with Netlify functions",
-  "dependencies": {
-    "mongodb": "^4.17.1"
-  }
-}
